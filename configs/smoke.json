@@ -1,0 +1,27 @@
+{
+  "seeds": [
+    0
+  ],
+  "architectures": [
+    "structured"
+  ],
+  "width": 64,
+  "baseline_steps": 512,
+  "recovery_steps": 512,
+  "checkpoint_steps": 512,
+  "eval_episodes": 2,
+  "lesions": [
+    "neurons",
+    "edges"
+  ],
+  "fractions": [
+    0.5
+  ],
+  "ppo": {
+    "n_steps": 128,
+    "batch_size": 64,
+    "n_epochs": 1,
+    "learning_rate": 0.0003
+  },
+  "environment": "foraging"
+}

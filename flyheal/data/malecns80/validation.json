@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "verifiedAtUtc": "2026-10-08T20:32:24.814654+00:00",
+  "method": "Independent Python verifier; SHA-256 of all official files; exact body ID/type/soma/NT comparison; streaming scan of every official edge-table record batch and multiset equality of the complete induced subgraph. Upstream builder was read, never executed.",
+  "graphSha256": "2424c9dd2e44534e600aeda1a9058039b1f22a4bd983284a27adc10b22130719",
+  "sources": {
+    "annotations": {
+      "url": "https://storage.googleapis.com/flyem-male-cns/v1.0/connectome-data/flat-connectome/body-annotations-male-cns-v1.0-minconf-0.5.feather",
+      "sha256": "2177e246113e4cfbf1e7772ec37c6da1955ff22e8063d0b1f833101f99a9a3b2",
+      "bytes": 14483314,
+      "matchesPinnedManifest": true
+    },
+    "edges": {
+      "url": "https://storage.googleapis.com/flyem-male-cns/v1.0/connectome-data/flat-connectome/connectome-weights-male-cns-v1.0-minconf-0.5.feather",
+      "sha256": "e35da783d1c686b2b58b3b87cd6a403ae43bfcfba8bff28e08ef752c1a56afc1",
+      "bytes": 1051241946,
+      "matchesPinnedManifest": true
+    },
+    "neurotransmitters": {
+      "url": "https://storage.googleapis.com/flyem-male-cns/v1.0/connectome-data/flat-connectome/body-neurotransmitters-male-cns-v1.0.feather",
+      "sha256": "95c9289220663abeb3409f3ad9e5a7f8a53f8093f5139d15502cd08da8879621",
+      "bytes": 43282834,
+      "matchesPinnedManifest": true
+    }
+  },
+  "checks": {
+    "rawSourceHashes": true,
+    "graphHash": true,
+    "uniqueBodyIds": true,
+    "all80BodiesPresent": true,
+    "all80TypesExact": true,
+    "all80SomaPositionsExact": true,
+    "all80NeurotransmittersExact": true,
+    "assumedSignsMatchDocumentedRule": true,
+    "allInternalDirectedEdgesAndCountsExact": true,
+    "1296Edges": true,
+    "26029SynapticContacts": true,
+    "inputAndReadoutCounts": true,
+    "inputChannelsMatchOfficialTypes": true,
+    "inputChannelMultiplicity": true,
+    "outputRolesExact": true,
+    "outputsAreAnnotatedDescending": true
+  },
+  "errors": [],
+  "officialEdgeRowsScanned": 151856684,
+  "selectedNodes": 80,
+  "selectedDirectedEdges": 1296,
+  "selectedSynapticContacts": 26029,
+  "excludedValidationClaims": [
+    "No independent reproduction of upstream node-selection ranking",
+    "No physiological validity of transmitter sign, rate dynamics, artificial inputs or action readout",
+    "No olfactory circuit or food-seeking circuit claim",
+    "No full-brain simulation claim"
+  ]
+}
