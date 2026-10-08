@@ -1,5 +1,7 @@
 # FlyHeal — mosca en un mundo 2D
 
+<img width="1280" height="942" alt="ui_preview" src="https://github.com/user-attachments/assets/fec6cacb-b27b-4b4e-b9e8-bf0a9ec6776f" />
+
 Trabajo final de Inteligencia Artificial II. Integrantes: Mathias Rodriguez Agro y Sebastian Barcelona.
 
 Agente PPO que busca alimento con ocho señales sensoriales limitadas y tres acciones: girar a izquierda, avanzar o girar a derecha. Todas producen movimiento. El entorno contiene tres alimentos, cinco obstáculos y un límite de 500 pasos. Se evalúan lesiones permanentes y reentrenamiento de los parámetros supervivientes.
