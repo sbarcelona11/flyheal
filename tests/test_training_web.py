@@ -21,7 +21,7 @@ def test_density_is_configurable_and_random_control_preserves_both_degrees():
 def test_web_config_limits_compute_and_records_requested_shape():
     cfg=training_config({'architecture':'structured','width':128,'density':.5,'budget':'fast','seeds':1})
     assert cfg['width']==128 and cfg['density']==.5 and cfg['seeds']==[0]
-    assert cfg['baseline_steps']==20480 and cfg['recovery_steps']==10240
+    assert cfg['baseline_steps']==51200 and cfg['recovery_steps']==25600
     for options in [{'width':4096}, {'density':2}, {'seeds':100}, {'budget':'unknown'}]:
         with pytest.raises(ValueError):training_config(options)
 

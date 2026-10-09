@@ -62,7 +62,7 @@ class ReplayStore:
             original_mask = original_model.policy.features_extractor.mask.cpu().int().tolist()
             del original_model
         environment = self.config.get('environment', 'foraging')
-        env = make_env(environment)
+        env = make_env(environment, sensor_encoding=self.config.get('sensor_encoding', 'raw'))
         frames = []
         evaluation_seed = 100000 + seed * 100
         try:

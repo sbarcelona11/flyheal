@@ -50,6 +50,11 @@ girar a izquierda, avanzar o girar a derecha; todas mueven 0,18 unidades y los
 giros cambian 0,35 radianes. Observación: olor y distancia libre en tres
 direcciones, seno y coseno de orientación. El agente no recibe el mapa completo.
 
+Las nuevas corridas amplifican el contraste entre las tres antenas con
+`clip(olor + 12 × (olor − media), −1, 1)` (`contrast_v1`). Se conserva el alcance
+local y se registra la codificación para reproducir cada modelo correctamente;
+las corridas anteriores sin ese campo usan la codificación original `raw`.
+
 Recompensa: 10 por alimento, 2 veces el avance hacia el alimento más cercano,
 −0,01 por paso y −0,15 por colisión. El progreso usa información global del
 simulador para calcular recompensa, aunque la política tiene sensores locales.
@@ -93,9 +98,9 @@ comparación más directa de topología es MaleCNS frente a recableado. Se usan
 matrices densas enmascaradas; no se afirma ahorro por kernels dispersos.
 
 PPO en CPU, un hilo, cinco épocas, rollout 512, batch 64, tasa 0,0003, gamma
-0,99 y GAE 0,95. Semillas 0,1,2, 40.960 pasos iniciales, 20.480 por cada rama
+0,99, GAE 0,95 y coeficiente de entropía 0,01. Semillas 0,1,2, 153.600 pasos iniciales, 51.200 por cada rama
 sana/lesión de neuronas/lesión de conexiones; diez episodios de evaluación cada
-5.120 pasos. Cada rama parte del mismo checkpoint y reinicia Adam de forma
+25.600 pasos. Cada rama parte del mismo checkpoint y reinicia Adam de forma
 simétrica. El control sano recibe igual presupuesto.
 
 El daño se selecciona uniformemente y permanece: se silencia el 50% de células
@@ -173,4 +178,3 @@ limitan al modelo y al presupuesto ejecutado.
 - [Stable-Baselines3 PPO](https://stable-baselines3.readthedocs.io/en/v2.7.0/modules/ppo.html): implementación.
 - [Gymnasium](https://gymnasium.farama.org/): API de entornos.
 - [MaleCNS](https://male-cns.janelia.org/download/): datos anatómicos usados, con validación y atribución adjuntas.
-

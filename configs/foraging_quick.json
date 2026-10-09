@@ -10,9 +10,9 @@
     "random"
   ],
   "width": 64,
-  "baseline_steps": 40960,
-  "recovery_steps": 20480,
-  "checkpoint_steps": 5120,
+  "baseline_steps": 153600,
+  "recovery_steps": 51200,
+  "checkpoint_steps": 25600,
   "eval_episodes": 10,
   "lesions": [
     "neurons",
@@ -28,7 +28,8 @@
     "learning_rate": 0.0003,
     "gamma": 0.99,
     "gae_lambda": 0.95,
-    "ent_coef": 0.0
+    "ent_coef": 0.01
   },
-  "environment": "foraging"
+  "environment": "foraging",
+  "sensor_encoding": "contrast_v1"
 }

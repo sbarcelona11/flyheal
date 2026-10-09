@@ -8,7 +8,7 @@ import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
-BUDGETS = {'fast': (20480, 10240), 'standard': (40960, 20480), 'extended': (102400, 40960)}
+BUDGETS = {'fast': (51200, 25600), 'standard': (153600, 51200), 'extended': (307200, 102400)}
 WIDTHS = (64, 80, 128, 256)
 DENSITIES = (.125, .25, .3125, .5, .75, 1.)
 
@@ -21,7 +21,7 @@ def training_config(options):
     real = architecture in ('male_cns', 'rewired_male_cns')
     width = options.get('width', 80 if real else 64)
     density = options.get('density', .3125)
-    budget = options.get('budget', 'fast')
+    budget = options.get('budget', 'standard')
     seeds = options.get('seeds', 1)
     if architecture not in ('dense', 'structured', 'random', 'male_cns', 'rewired_male_cns') or type(width) is not int or width not in WIDTHS:
         raise ValueError('Arquitectura inválida o ancho fuera de 64/80/128/256')
@@ -30,13 +30,13 @@ def training_config(options):
     if (not real and density not in DENSITIES) or budget not in BUDGETS or type(seeds) is not int or seeds not in (1, 3):
         raise ValueError('Conectividad, presupuesto o número de semillas inválido')
     baseline, recovery = BUDGETS[budget]
-    config = {'environment': environment, 'architectures': [architecture], 'width': width,
+    config = {'environment': environment, 'sensor_encoding': 'contrast_v1', 'architectures': [architecture], 'width': width,
             'density': None if real else (1. if architecture == 'dense' else density),
             'seeds': list(range(seeds)), 'baseline_steps': baseline, 'recovery_steps': recovery,
             'checkpoint_steps': 5120, 'eval_episodes': 20,
             'lesions': ['neurons', 'edges'], 'fractions': [.5],
             'ppo': {'n_steps': 512, 'batch_size': 64, 'n_epochs': 5,
-                    'learning_rate': .0003, 'gamma': .99, 'gae_lambda': .95, 'ent_coef': 0.}}
+                    'learning_rate': .0003, 'gamma': .99, 'gae_lambda': .95, 'ent_coef': .01}}
     if real:
         from .connectome import load_graph, GRAPH_PATH
         import hashlib

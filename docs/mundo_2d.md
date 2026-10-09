@@ -16,6 +16,13 @@ con ángulos ±0,6 radianes. Olor = max(0, 1 − distancia a comida / 4), sin se
 fuera del alcance. Olor y distancias están en [0,1]; orientación en [−1,1]. El
 olor no simula difusión ni oclusión por paredes; es un campo local sencillo.
 
+Las nuevas configuraciones usan `sensor_encoding: contrast_v1`: cada señal de
+olor se transforma en `clip(olor + 12 × (olor − media de las tres antenas), −1, 1)`.
+Esto amplifica el contraste direccional sin ampliar el alcance ni revelar
+coordenadas. Los canales de olor codificados pueden ser negativos; los rayos
+siguen en [0,1]. La misma transformación se usa durante entrenamiento,
+evaluación y replay. Las corridas antiguas conservan `raw` al faltar ese campo.
+
 Acciones: **0 izquierda**, **1 avanzar**, **2 derecha**. Cada acción mueve 0,18
 unidades; girar cambia primero la orientación ±0,35 radianes. La colisión se verifica en la posición propuesta al final de cada paso, no
 mediante un barrido continuo del trayecto. Esta aproximación discreta puede
@@ -67,10 +74,10 @@ no es un control de capacidad igualada. El visor usa posiciones originales de
 soma: sus líneas son aristas del grafo, no trazados de neuritas. La actividad
 mostrada es calculada por el modelo, adimensional y no fisiológica.
 
-Presupuesto común: semillas 0,1,2; 40.960 pasos iniciales y 20.480 pasos por
+Presupuesto común: semillas 0,1,2; 153.600 pasos iniciales y 51.200 pasos por
 cada rama sana/lesión de neuronas/lesión de conexiones. Ambas lesiones son del
 50% y permanentes. PPO: cinco épocas, evaluación determinista de diez episodios
-cada 5.120 pasos. La misma política inicial se copia para todas las ramas y se
+cada 25.600 pasos, con coeficiente de entropía 0,01. La misma política inicial se copia para todas las ramas y se
 reinicia Adam de igual forma en sana y dañadas. La evaluación usa los mismos
 mapas, posiciones y orientación por semilla. No hay selección por mejor
 checkpoint ni regeneración de neuronas/conexiones.

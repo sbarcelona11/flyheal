@@ -1,0 +1,1 @@
+{"architecture": "male_cns", "seed": 0, "condition": "edges_0.5", "local_steps": 51200, "trained_steps": 307200, "target_steps": 307200, "percent": 99, "last_return": 33.35910988287351, "elapsed_seconds": 163.91356753298896}

@@ -1,0 +1,278 @@
+{
+  "note": "Separate held-out map seeds 300000..300019; one training seed, no cross-architecture claim",
+  "comparisons": [
+    {
+      "label": "delivered_baseline",
+      "training_seed": 0,
+      "architecture": "male_cns",
+      "training_steps": 153600,
+      "sensor_encoding": "contrast_v1",
+      "ent_coef": 0.01,
+      "mean_foods": 2.6,
+      "success_rate": 0.75,
+      "mean_collisions": 77.05,
+      "episodes": [
+        {
+          "map_seed": 300000,
+          "foods_collected": 2,
+          "collisions": 6,
+          "success": false,
+          "steps": 500,
+          "return_value": 23.635899353131304,
+          "action_counts": [
+            467,
+            0,
+            33
+          ]
+        },
+        {
+          "map_seed": 300001,
+          "foods_collected": 3,
+          "collisions": 0,
+          "success": true,
+          "steps": 36,
+          "return_value": 41.98106219386325,
+          "action_counts": [
+            16,
+            0,
+            20
+          ]
+        },
+        {
+          "map_seed": 300002,
+          "foods_collected": 1,
+          "collisions": 457,
+          "success": false,
+          "steps": 500,
+          "return_value": -52.11398582650407,
+          "action_counts": [
+            258,
+            0,
+            242
+          ]
+        },
+        {
+          "map_seed": 300003,
+          "foods_collected": 1,
+          "collisions": 450,
+          "success": false,
+          "steps": 500,
+          "return_value": -48.23873284344873,
+          "action_counts": [
+            256,
+            0,
+            244
+          ]
+        },
+        {
+          "map_seed": 300004,
+          "foods_collected": 3,
+          "collisions": 0,
+          "success": true,
+          "steps": 102,
+          "return_value": 57.083534486462895,
+          "action_counts": [
+            50,
+            0,
+            52
+          ]
+        },
+        {
+          "map_seed": 300005,
+          "foods_collected": 3,
+          "collisions": 0,
+          "success": true,
+          "steps": 56,
+          "return_value": 45.01939269596025,
+          "action_counts": [
+            30,
+            0,
+            26
+          ]
+        },
+        {
+          "map_seed": 300006,
+          "foods_collected": 3,
+          "collisions": 0,
+          "success": true,
+          "steps": 77,
+          "return_value": 45.602795165442316,
+          "action_counts": [
+            44,
+            0,
+            33
+          ]
+        },
+        {
+          "map_seed": 300007,
+          "foods_collected": 3,
+          "collisions": 0,
+          "success": true,
+          "steps": 129,
+          "return_value": 60.4499815156592,
+          "action_counts": [
+            76,
+            0,
+            53
+          ]
+        },
+        {
+          "map_seed": 300008,
+          "foods_collected": 3,
+          "collisions": 0,
+          "success": true,
+          "steps": 121,
+          "return_value": 52.07394474890796,
+          "action_counts": [
+            63,
+            0,
+            58
+          ]
+        },
+        {
+          "map_seed": 300009,
+          "foods_collected": 3,
+          "collisions": 0,
+          "success": true,
+          "steps": 109,
+          "return_value": 53.64814923005204,
+          "action_counts": [
+            58,
+            0,
+            51
+          ]
+        },
+        {
+          "map_seed": 300010,
+          "foods_collected": 3,
+          "collisions": 0,
+          "success": true,
+          "steps": 36,
+          "return_value": 41.02260305202824,
+          "action_counts": [
+            17,
+            0,
+            19
+          ]
+        },
+        {
+          "map_seed": 300011,
+          "foods_collected": 3,
+          "collisions": 0,
+          "success": true,
+          "steps": 77,
+          "return_value": 50.664429559449296,
+          "action_counts": [
+            47,
+            0,
+            30
+          ]
+        },
+        {
+          "map_seed": 300012,
+          "foods_collected": 3,
+          "collisions": 0,
+          "success": true,
+          "steps": 65,
+          "return_value": 48.089460682559434,
+          "action_counts": [
+            38,
+            0,
+            27
+          ]
+        },
+        {
+          "map_seed": 300013,
+          "foods_collected": 3,
+          "collisions": 0,
+          "success": true,
+          "steps": 92,
+          "return_value": 44.59391907014189,
+          "action_counts": [
+            59,
+            0,
+            33
+          ]
+        },
+        {
+          "map_seed": 300014,
+          "foods_collected": 2,
+          "collisions": 144,
+          "success": false,
+          "steps": 500,
+          "return_value": 13.060335000155593,
+          "action_counts": [
+            387,
+            0,
+            113
+          ]
+        },
+        {
+          "map_seed": 300015,
+          "foods_collected": 1,
+          "collisions": 479,
+          "success": false,
+          "steps": 500,
+          "return_value": -60.06330671392687,
+          "action_counts": [
+            248,
+            0,
+            252
+          ]
+        },
+        {
+          "map_seed": 300016,
+          "foods_collected": 3,
+          "collisions": 0,
+          "success": true,
+          "steps": 38,
+          "return_value": 42.81089872208302,
+          "action_counts": [
+            21,
+            0,
+            17
+          ]
+        },
+        {
+          "map_seed": 300017,
+          "foods_collected": 3,
+          "collisions": 0,
+          "success": true,
+          "steps": 44,
+          "return_value": 40.849753392727166,
+          "action_counts": [
+            26,
+            0,
+            18
+          ]
+        },
+        {
+          "map_seed": 300018,
+          "foods_collected": 3,
+          "collisions": 0,
+          "success": true,
+          "steps": 133,
+          "return_value": 49.54632416444493,
+          "action_counts": [
+            69,
+            0,
+            64
+          ]
+        },
+        {
+          "map_seed": 300019,
+          "foods_collected": 3,
+          "collisions": 5,
+          "success": true,
+          "steps": 275,
+          "return_value": 42.400855839410205,
+          "action_counts": [
+            231,
+            0,
+            44
+          ]
+        }
+      ]
+    }
+  ]
+}

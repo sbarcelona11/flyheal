@@ -6,7 +6,7 @@ Trabajo final de Inteligencia Artificial II. Integrantes: Mathias Rodriguez Agro
 
 Agente PPO que busca alimento con ocho señales sensoriales limitadas y tres acciones: girar a izquierda, avanzar o girar a derecha. Todas producen movimiento. El entorno contiene tres alimentos, cinco obstáculos y un límite de 500 pasos. Se evalúan lesiones permanentes y reentrenamiento de los parámetros supervivientes.
 
-**Esta versión contiene únicamente el mundo 2D. Los entrenamientos anteriores fueron eliminados.** La web abre sin modelos guardados; inicia una nueva corrida para ver comportamiento, actividad y decisiones reales. Las pruebas usan modelos temporales y no son resultados experimentales del trabajo.
+**Esta versión contiene únicamente el mundo 2D.** La web descubre los modelos completos en `results/`; si no hay corridas, inicia una nueva para ver comportamiento, actividad y decisiones reales. Las pruebas usan modelos temporales y no son resultados experimentales del trabajo.
 
 ## Instalación e inicio
 
@@ -114,9 +114,41 @@ python -m flyheal.demo --results results/new_run --architecture male_cns --headl
 
 Entrenamiento inicial y copia del checkpoint en tres ramas: continuación sana, lesión del 50% de unidades y lesión del 50% de conexiones. Daño persistente y reinicio simétrico de Adam. Evaluación determinista con mapas reservados emparejados. Se registran retorno, alimentos, colisiones, éxito, caída inmediata, ganancia y brecha con control sano. La fracción recuperada solo corresponde si hubo una pérdida; retornos negativos no justifican el umbral del 90%.
 
-Primero comprobar que la política sana recolecta alimento. Girar sin chocar puede obtener mejor retorno que avanzar contra obstáculos; el retorno no basta para demostrar éxito. La configuración rápida no garantiza convergencia. Esta limpieza no modifica recompensa ni entrenamiento y no resuelve por sí sola esa conducta.
+Las nuevas corridas usan `sensor_encoding: contrast_v1`: conservan los ocho
+sensores y su alcance local, amplificando la diferencia entre las tres señales
+de olor mediante `clip(olor + 12 × (olor − media), −1, 1)`. No se entregan
+coordenadas de comida ni se modifica la recompensa. La codificación se guarda
+en la configuración y se usa también al evaluar y reproducir; las corridas
+antiguas sin ese campo mantienen los sensores originales (`raw`).
+
+PPO usa `ent_coef: 0.01` para incentivar exploración. En la web, el presupuesto
+predeterminado es 153.600 pasos iniciales y 51.200 por rama; el modo diagnóstico
+usa 51.200 + 25.600 y no garantiza aprendizaje. Los archivos de comparación
+usan 153.600 + 51.200, con evaluación cada 25.600 pasos. Hay que entrenar de
+nuevo para obtener políticas con esta configuración.
+
+Primero comprobar que la política sana recolecta alimento en mapas reservados.
+Girar sin chocar puede obtener mejor retorno que avanzar contra obstáculos;
+el retorno no basta para demostrar éxito. Alternar giros puede conducir hacia
+la comida porque cada giro incluye movimiento. La convergencia depende de la
+arquitectura y la semilla; evaluar alimentos, éxito y colisiones en varias
+semillas antes de interpretar las lesiones.
 
 Cada corrida genera CSV, tablas agregadas, metadatos, máscaras, checkpoints, gráficos e informe. La demo de un episodio no sustituye la evaluación agregada.
+
+La corrida de verificación `results/foraging_contrast_20261008` incluye MaleCNS,
+semilla de entrenamiento 0, y sus ramas de lesión y recuperación. El modelo
+inicial recoge los tres alimentos en el episodio mostrado por la web. En otros
+20 mapas (semillas 300000–300019), recoge en promedio 2,6 alimentos y completa
+el 75% de los episodios. La comparación a igual presupuesto de 102.400 pasos
+pasa de 1,1 alimentos y 5% de éxito con sensores originales a 2,55 y 65% con
+contraste; ambos controles usan entropía 0,01. Estos resultados corresponden
+a una sola semilla y arquitectura. Los checkpoints de control, métricas y
+código de evaluación están incluidos en esa carpeta; se puede repetir con:
+
+```sh
+docker compose run --rm -e PYTHONPATH=/app flyheal python results/foraging_contrast_20261008/source_used/validate_independent.py
+```
 
 ## Pruebas
 

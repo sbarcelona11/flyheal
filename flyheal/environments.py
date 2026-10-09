@@ -15,8 +15,11 @@ class ForagingEnv(gym.Env):
     horizon = 500
     sensor_range = 4.0
 
-    def __init__(self):
+    def __init__(self, sensor_encoding='raw'):
         super().__init__()
+        if sensor_encoding not in ('raw', 'contrast_v1'):
+            raise ValueError('Unknown sensor encoding')
+        self.sensor_encoding = sensor_encoding
         self.action_space = spaces.Discrete(3)
         self.observation_space = spaces.Box(-1., 1., shape=(8,), dtype=np.float32)
 
@@ -97,6 +100,9 @@ class ForagingEnv(gym.Env):
             antenna = self.position + .45*np.array([math.cos(angle), math.sin(angle)])
             distance = np.linalg.norm(remaining-antenna, axis=1).min() if len(remaining) else self.sensor_range
             odors.append(max(0., 1.-distance/self.sensor_range))
+        if self.sensor_encoding == 'contrast_v1':
+            odors = np.asarray(odors, dtype=np.float32)
+            odors = np.clip(odors + 12. * (odors - odors.mean()), -1., 1.).tolist()
         return np.array(odors + [self._clearance(a) for a in angles] +
                         [math.sin(self.heading), math.cos(self.heading)], dtype=np.float32)
 

@@ -1,0 +1,17 @@
+architecture,seed,condition,steps,mean_foods,mean_collisions,success_rate,stage
+male_cns,0,baseline,0,0.2,483.75,0.0,baseline
+male_cns,0,baseline,25600,2.25,105.5,0.55,baseline
+male_cns,0,baseline,51200,1.95,92.9,0.35,baseline
+male_cns,0,baseline,76800,2.1,71.3,0.4,baseline
+male_cns,0,baseline,102400,2.35,47.95,0.55,baseline
+male_cns,0,baseline,128000,2.3,48.95,0.45,baseline
+male_cns,0,baseline,153600,2.65,91.3,0.8,pre
+male_cns,0,edges_0.5,0,2.8,47.45,0.9,post
+male_cns,0,edges_0.5,25600,2.35,48.75,0.55,retraining
+male_cns,0,edges_0.5,51200,2.7,68.85,0.85,recovered
+male_cns,0,healthy,0,2.65,91.3,0.8,healthy
+male_cns,0,healthy,25600,2.9,23.65,0.95,healthy
+male_cns,0,healthy,51200,2.7,69.2,0.85,healthy
+male_cns,0,neurons_0.5,0,1.65,89.4,0.2,post
+male_cns,0,neurons_0.5,25600,2.65,72.3,0.8,retraining
+male_cns,0,neurons_0.5,51200,2.8,47.65,0.9,recovered

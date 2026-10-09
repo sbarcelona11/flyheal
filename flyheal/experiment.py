@@ -22,6 +22,8 @@ from .metrics import summarize, aggregate
 def validate_config(config):
     if config.get('environment', 'foraging') != 'foraging':
         raise ValueError('Unknown environment')
+    if config.get('sensor_encoding', 'raw') not in ('raw', 'contrast_v1'):
+        raise ValueError('Unknown sensor encoding')
     required = ['seeds', 'architectures', 'width', 'baseline_steps', 'recovery_steps',
                 'checkpoint_steps', 'eval_episodes', 'lesions', 'fractions', 'ppo']
     if any(key not in config for key in required):
@@ -57,9 +59,9 @@ def validate_config(config):
             raise ValueError(f'{field} must be a positive multiple of checkpoint_steps')
 
 
-def evaluate(model, episodes, seed, environment='foraging'):
+def evaluate(model, episodes, seed, environment='foraging', sensor_encoding='raw'):
     """Greedy evaluation on a separate env, no training RNG or env mutation."""
-    env = make_env(environment)
+    env = make_env(environment, sensor_encoding=sensor_encoding)
     results = []
     try:
         for episode in range(episodes):
@@ -87,6 +89,7 @@ def reset_branch_optimizer(model):
 def run(config, output):
     validate_config(config)
     environment = config.get('environment', 'foraging')
+    sensor_encoding = config.get('sensor_encoding', 'raw')
     output = Path(output)
     output.mkdir(parents=True, exist_ok=True)
     if (output / 'metadata.json').exists():
@@ -140,7 +143,7 @@ def run(config, output):
         temp.replace(output / 'progress.json')
     progress('', 0, 'preparing', 0)
     def record(model, arch, seed, condition, steps):
-        for result in evaluate(model, config['eval_episodes'], 100000 + seed * 100, environment):
+        for result in evaluate(model, config['eval_episodes'], 100000 + seed * 100, environment, sensor_encoding):
             eval_seed, reward, truncated = result[:3]
             row = {'architecture': arch, 'seed': seed, 'condition': condition,
                    'steps': steps, 'eval_seed': eval_seed, 'reward': reward, 'time_limit': truncated}
@@ -156,7 +159,7 @@ def run(config, output):
         for seed in config['seeds']:
             folder = output / 'checkpoints' / f'{arch}_seed{seed}'
             folder.mkdir(parents=True, exist_ok=True)
-            env = make_env(environment)
+            env = make_env(environment, sensor_encoding=sensor_encoding)
             model = PPO('MlpPolicy', env, seed=seed, device='cpu', verbose=0,
                         policy_kwargs={'features_extractor_class': ConnectomeExtractor if arch in REAL_KINDS else FlyExtractor,
                                        'features_extractor_kwargs': {'kind': arch, 'width': config['width'], 'seed': seed, 'density': config.get('density')},
@@ -187,7 +190,7 @@ def run(config, output):
                 (f'{mode}_{fraction:g}', mode, fraction)
                 for mode in config['lesions'] for fraction in config['fractions']]
             for condition, mode, fraction in conditions:
-                branch_env = make_env(environment)
+                branch_env = make_env(environment, sensor_encoding=sensor_encoding)
                 branch = PPO.load(folder / 'baseline.zip', env=branch_env, device='cpu')
                 branch.set_random_seed(20000 + seed)
                 reset_branch_optimizer(branch)
