@@ -1,0 +1,66 @@
+{
+  "status": "running",
+  "started_utc": "2026-10-30T21:26:22.588912+00:00",
+  "config": {
+    "environment": "foraging",
+    "sensor_encoding": "contrast_v1",
+    "architectures": [
+      "structured"
+    ],
+    "width": 128,
+    "density": 0.5,
+    "seeds": [
+      0
+    ],
+    "baseline_steps": 51200,
+    "recovery_steps": 25600,
+    "checkpoint_steps": 5120,
+    "eval_episodes": 20,
+    "lesions": [
+      "neurons",
+      "edges"
+    ],
+    "fractions": [
+      0.5
+    ],
+    "ppo": {
+      "n_steps": 512,
+      "batch_size": 64,
+      "n_epochs": 5,
+      "learning_rate": 0.0003,
+      "gamma": 0.99,
+      "gae_lambda": 0.95,
+      "ent_coef": 0.01
+    }
+  },
+  "python": "3.12.15",
+  "platform": "Linux-7.0.14-linuxkit-aarch64-with-glibc2.41",
+  "device": "cpu",
+  "torch_threads": 1,
+  "packages": {
+    "torch": "2.14.1+cpu",
+    "numpy": "2.5.3",
+    "gymnasium": "1.2.0",
+    "stable-baselines3": "2.7.0",
+    "pandas": "3.0.6",
+    "matplotlib": "3.10.6"
+  },
+  "source_sha256": {
+    "connectome.py": "e857c6c1ea297fc49d826bba818e243a48f5afd545c38122be6446c5b460ad93",
+    "train_worker.py": "8c81d06e2a325422b009ae023eb72df65546253ffaac8f711b6eb5bf0e1ce7a1",
+    "__init__.py": "c369d03abb77638021eced2cd56aba3f824d04a78ad6952b9d2b2f772aac0faa",
+    "report.py": "794da0862b8eca9bbb78e393f0850fbf996278bb902c567c46e6bbb549fd9710",
+    "models.py": "cd76b5a2656c6a829047435dba6578044c19dfcc6fb0b36a3bacd3ccae62693e",
+    "plots.py": "b7f1f1d82d169bd2a6d6dde04170119a4b83794c72247122cd93f013c27a93b3",
+    "demo.py": "e0f38af982bf0945c3f593ab71ae0c8d4a4488de1fd93b14c6a0a1beb5158386",
+    "ui.py": "4e400a02d067756eedd26a7fd0b97fd7ca3ad46f500d27a4d79a80d973e37ca1",
+    "environments.py": "5a3da27387d121dc5c7f77a15ee6de2658f026ee695e272f5c110fbee7bc7edc",
+    "experiment.py": "9ae1d307a3a61251e2dca84cd055ceee06a193ef854e6ffa9c8104e2e14639fe",
+    "training.py": "2b8416c94168e75b49958411ba59353d1e5d6d7a042f504692c9e189d1101af1",
+    "metrics.py": "63194669e0fd9cee1931df4065eba1d088e96baa397bfc13ef15c470919c9a9a"
+  },
+  "graph_provenance": "synthetic, connectome-inspired; no MaleCNS data",
+  "evaluation": "deterministic, paired initial states, 100000 + seed*100 + episode",
+  "optimizer_continuation": "reset identically in all branches",
+  "lesions": []
+}

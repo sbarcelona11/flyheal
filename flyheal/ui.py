@@ -1,6 +1,7 @@
 """Local presentation UI backed by real checkpoint inference and recorded metrics."""
 import argparse
 import json
+import os
 import threading
 import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -111,10 +112,42 @@ class ReplayStore:
                 'active_connections': extractor.effective_connections()}
 
 
-def make_server(results, port=8765, training_root=None, host='127.0.0.1'):
+def _host_and_port(value):
+    """Return the lowercase ``(hostname, port)`` of a URL or bare ``host[:port]``.
+
+    Ports 80 and 443 are normalised to ``None`` so that scheme differences behind
+    a proxy (browser uses https, server sees http) don't affect the comparison.
+    """
+    parsed = urlparse(value if '://' in value else '//' + value)
+    port = parsed.port
+    if port in (80, 443):
+        port = None
+    return (parsed.hostname or '').lower(), port
+
+
+def _hostname(value):
+    return _host_and_port(value)[0]
+
+
+def _effective_host(headers):
+    """Resolve the request's effective host, honouring ``X-Forwarded-Host``."""
+    forwarded = headers.get('X-Forwarded-Host')
+    if forwarded:
+        return forwarded.split(',')[0].strip()
+    return headers.get('Host', '')
+
+
+def parse_allowed_hosts(value):
+    """Parse a comma-separated list of hostnames into a set of lowercase names."""
+    return {name.strip().lower() for name in value.split(',') if name.strip()}
+
+
+def make_server(results, port=8765, training_root=None, host='127.0.0.1', allowed_hosts=None):
     from .training import TrainingManager
     manager = TrainingManager(results, training_root)
     web_root = Path(__file__).parent / 'web'
+    if allowed_hosts is not None:
+        allowed_hosts = set(allowed_hosts)
     class Handler(BaseHTTPRequestHandler):
         def respond(self, body, status=200, content_type='application/json; charset=utf-8'):
             if isinstance(body, dict):
@@ -162,11 +195,12 @@ def make_server(results, port=8765, training_root=None, host='127.0.0.1'):
                 self.respond({'error': 'No se pudo cargar el modelo. Revisá la carpeta de resultados.'}, 500)
 
         def do_POST(self):
-            origins = {f'http://127.0.0.1:{self.server.server_port}',
-                       f'http://localhost:{self.server.server_port}'}
-            if ('http://' + self.headers.get('Host', '') not in origins
-                    or self.headers.get('Origin', next(iter(origins))) not in origins):
-                return self.respond({'error': 'Solo se permiten solicitudes locales'}, 403)
+            effective_host = _effective_host(self.headers)
+            source = self.headers.get('Origin') or self.headers.get('Referer')
+            if not source or _host_and_port(source) != _host_and_port(effective_host):
+                return self.respond({'error': 'Solo se permiten solicitudes del mismo origen'}, 403)
+            if allowed_hosts is not None and _hostname(effective_host) not in allowed_hosts:
+                return self.respond({'error': 'Host no permitido'}, 403)
             try:
                 if self.path == '/api/cancel':
                     return self.respond(manager.cancel())
@@ -199,11 +233,16 @@ def main():
     parser = argparse.ArgumentParser(description='FlyHeal local visual laboratory')
     default_results = Path('results/new_run')
     parser.add_argument('--results', type=Path, default=default_results)
-    parser.add_argument('--port', type=int, default=8765)
-    parser.add_argument('--host', default='127.0.0.1', help='Interfaz de escucha (0.0.0.0 para Docker)')
+    parser.add_argument('--port', type=int, default=int(os.environ.get('PORT', 8765)))
+    parser.add_argument('--host', default=os.environ.get('FLYHEAL_HOST', '127.0.0.1'),
+                        help='Interfaz de escucha (0.0.0.0 para Docker)')
+    parser.add_argument('--allowed-hosts', help='Hosts permitidos separados por comas '
+                                                '(tiene prioridad sobre FLYHEAL_ALLOWED_HOSTS)')
     parser.add_argument('--no-open', action='store_true')
     args = parser.parse_args()
-    server = make_server(args.results, args.port, host=args.host)
+    raw_allowed = args.allowed_hosts if args.allowed_hosts is not None else os.environ.get('FLYHEAL_ALLOWED_HOSTS')
+    allowed_hosts = parse_allowed_hosts(raw_allowed) if raw_allowed else None
+    server = make_server(args.results, args.port, host=args.host, allowed_hosts=allowed_hosts)
     address = f'http://127.0.0.1:{server.server_port}'
     print(f'FlyHeal disponible en {address} · Ctrl+C para cerrar', flush=True)
     if not args.no_open:

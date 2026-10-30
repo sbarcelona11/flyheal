@@ -1,0 +1,32 @@
+{
+  "environment": "foraging",
+  "sensor_encoding": "contrast_v1",
+  "architectures": [
+    "structured"
+  ],
+  "width": 128,
+  "density": 0.5,
+  "seeds": [
+    0
+  ],
+  "baseline_steps": 51200,
+  "recovery_steps": 25600,
+  "checkpoint_steps": 5120,
+  "eval_episodes": 20,
+  "lesions": [
+    "neurons",
+    "edges"
+  ],
+  "fractions": [
+    0.5
+  ],
+  "ppo": {
+    "n_steps": 512,
+    "batch_size": 64,
+    "n_epochs": 5,
+    "learning_rate": 0.0003,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "ent_coef": 0.01
+  }
+}

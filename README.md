@@ -81,6 +81,30 @@ Las pruebas JavaScript requieren Node en el equipo, como se indica más abajo.
 Después de modificar el código, volver a ejecutar `docker compose up --build -d`.
 El código está incluido en la imagen y `results/` se excluye de la construcción.
 
+## Configuración
+
+La interfaz se puede ajustar con variables de entorno; los argumentos de línea
+de comandos tienen prioridad sobre ellas:
+
+- `PORT`: puerto de escucha (por defecto 8765). Equivale a `--port`.
+- `FLYHEAL_HOST`: interfaz de escucha (por defecto `127.0.0.1`; usar `0.0.0.0`
+  en Docker o detrás de un proxy). Equivale a `--host`.
+- `FLYHEAL_ALLOWED_HOSTS`: lista opcional de hosts permitidos, separada por
+  comas (por ejemplo `flyheal.onrender.com,localhost,127.0.0.1`). Si está
+  definida, además del chequeo de mismo origen, el host efectivo del pedido
+  debe figurar en la lista (comparado sin puerto y en minúsculas). Si no está
+  definida, no se aplica. Equivale a `--allowed-hosts`.
+
+Las solicitudes `POST` a `/api/train` y `/api/cancel` exigen mismo origen: el
+host de `Origin` (o de `Referer` si no hay `Origin`) debe coincidir con el host
+efectivo del pedido, tomando `X-Forwarded-Host` cuando un proxy lo agrega. Así
+funciona sin configuración en local, en Render, en Hugging Face Spaces o en
+cualquier VPS detrás de un proxy HTTPS. Para usarla solo en local se recomienda:
+
+```sh
+FLYHEAL_ALLOWED_HOSTS=localhost,127.0.0.1 python -m flyheal.ui
+```
+
 ## Arquitecturas y datos
 
 - **MaleCNS medido:** subgrafo validado de 80 neuronas, 1.296 conexiones dirigidas y 26.029 contactos sinápticos. Tamaño y topología fijos, ganancias entrenables, cinco iteraciones de dinámica artificial y lector PPO 80→3.
